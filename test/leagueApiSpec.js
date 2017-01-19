@@ -13,13 +13,13 @@ describe('League of Legends api wrapper test suite', function () {
         leagueApi = require('../lib/lolapi'),
         mockChampionArray = ['Teemo', 'Ahri', 'Vladimir'],
         mockSummonersArray = [29228901, 19199530, 19442617],
-        mockMatchArray = [1622420185, 1622447158],
+        mockMatchArray = [2403241741, 1622447158],
         mockTeam = 'TEAM-e5d4b050-4699-11e5-8042-c81f66dd32cd'
         ;
 
 
     beforeEach(function () {
-        leagueApi.init(process.env.API_TOKEN, process.env.API_REGION);
+        leagueApi.init('RGAPI-9b8c405d-ae1b-4a13-8878-3f3f9e38d6dd', 'na');
     });
 
     it('should be able to retrieve all champions', function (done) {
@@ -54,7 +54,7 @@ describe('League of Legends api wrapper test suite', function () {
         leagueApi.getChampions(true, 'na', function (err, res) {
             should.not.exist(err);
             should.exist(res);
-            res.length.should.be.equal(20);
+            res.length.should.be.equal(10);
             done();
         });
     });
@@ -170,8 +170,16 @@ describe('League of Legends api wrapper test suite', function () {
         });
     });
 
-    it('should be able to get Team League Data', function(done) {
-        leagueApi.getTeamLeagueData(mockTeam, 'euw', function(err, data) {
+    it('should be able to get League Data Challenger', function(done) {
+        leagueApi.getLeagueChallenger('RANKED_SOLO_5x5', 'euw', function(err, data) {
+            should.not.exist(err);
+            should.exist(data);
+            done();
+        });
+    });
+
+    it('should be able to get League Data Master', function(done) {
+        leagueApi.getLeagueMaster('RANKED_SOLO_5x5', 'euw', function(err, data) {
             should.not.exist(err);
             should.exist(data);
             done();
@@ -186,13 +194,6 @@ describe('League of Legends api wrapper test suite', function () {
         });
     });
 
-    it('should be able to get Team League Data Entry', function(done) {
-        leagueApi.getTeamLeagueEntryData(mockTeam, 'euw', function(err, data) {
-            should.not.exist(err);
-            should.exist(data);
-            done();
-        });
-    });
 
     it('should be able to get match history', function(done) {
         leagueApi.getMatchHistory(mockSummonersArray[0], null, 'na', function(err, match) {
@@ -232,13 +233,6 @@ describe('League of Legends api wrapper test suite', function () {
         });
     });
 
-    it('should be able to get team information', function(done) {
-        leagueApi.getTeam(mockTeam, 'euw', function(err, team) {
-            should.exist(team);
-            should.not.exist(err);
-            done();
-        });
-    });
 
     it('should be able to get a new endpoint', function(done) {
 
@@ -270,7 +264,7 @@ describe('League of Legends api wrapper test suite', function () {
             done();
         });
     });
-    
+
     it('shoult not be able to get infos from not existing regions', function(done) {
        leagueApi.Summoner.getByName('', 'eu-na', function(err, sum) {
            should.exist(err);
